@@ -1,50 +1,101 @@
-# React + TypeScript + Vite
+# Semantic Release
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project uses [semantic-release](https://github.com/semantic-release/semantic-release) for automated version management and package publishing.
 
-Currently, two official plugins are available:
+## Setup
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+1. Install Semantic Release Git and Changelog plugins:
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```bash
+npm install --save-dev @semantic-release/git @semantic-release/changelog
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+2. Add the following to your `package.json`:
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+```json
+"private": true,
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    "@semantic-release/changelog",
+    "@semantic-release/github",
+    "@semantic-release/npm",
+    "@semantic-release/git"
+  ],
+  "release": {
+    "prepare": [
+      "@semantic-release/changelog",
+      "@semantic-release/npm",
+      {
+        "path": "@semantic-release/git",
+        "assets": [
+          "package.json",
+          "package-lock.json",
+          "CHANGELOG.md"
+        ],
+        "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+      }
+    ]
+  }
+```
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+3. Setup GitHub Actions to run semantic-release:
+
+```yaml
+# .github/workflows/main.yml
+```
+
+```yaml
+name: Semantic release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish:
+    runs-on: ubuntu-22.04
+
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Node.js
+
+        uses: actions/setup-node@v1
+
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+
+        run: npm install
+
+      - name: Build app
+
+        run: npm run build
+
+      - name: Semantic release
+
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+
+        run: npx semantic-release
+```
+
+## Usage
+
+To release a new version, push a commit to the `main` branch.
+
+```bash
+git add .
+
+git commit -m "feat: Add Semantic Release and GithubActions"
+
+git push
 ```
