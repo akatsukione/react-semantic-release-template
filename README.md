@@ -13,7 +13,10 @@ npm install --save-dev @semantic-release/git @semantic-release/changelog
 2. Add the following to your `package.json`:
 
 ```json
-"private": true,
+  "private": true,
+  "publishConfig": {
+    "access": "public"
+  },
   "plugins": [
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
