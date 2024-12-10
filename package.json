@@ -1,5 +1,5 @@
 {
-  "name": "react-semantic-release-template",
+  "name": "@myownorg-c/react-semantic-release-template",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -14,7 +14,7 @@
     "react-dom": "^18.3.1"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "restricted"
   },
   "devDependencies": {
     "@eslint/js": "^9.15.0",
