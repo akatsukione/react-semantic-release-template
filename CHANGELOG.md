@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/akatsukione/react-semantic-release-template/compare/v1.0.0...v1.0.1) (2025-02-09)
+
+
+### Bug Fixes
+
+* add readme description ([67dff4e](https://github.com/akatsukione/react-semantic-release-template/commit/67dff4ebb27ca8202ced2ec4fc26bbdd7ab3ac9c))
+
 # 1.0.0 (2024-12-09)
 
 
