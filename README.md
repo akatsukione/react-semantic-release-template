@@ -95,6 +95,10 @@ jobs:
 
 To release a new version, push a commit to the `main` branch.
 
+For the minor version, you need to add the `feat` keyword to the commit message.
+
+For the patch version, you need to add the `fix` keyword to the commit message.
+
 ```bash
 git add .
 
